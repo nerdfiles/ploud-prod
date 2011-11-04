@@ -1,0 +1,5 @@
+<h2>Are you sure you want to remove site "${view.site.site_name}"?</h2>
+
+<form method="post" action="${request.url}">
+  <tal:block content="structure view.snippet('form-actions', view)" />
+</form>

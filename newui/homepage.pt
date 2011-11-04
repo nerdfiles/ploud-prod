@@ -1,0 +1,318 @@
+<div class="intro grid_16">
+  <div class="content-inner rounded-all">
+    <h1>What is Ploud?</h1>
+    <p>Ploud is a free, easy-to-use service for creating and hosting Plone sites. Plone is a powerful open source content management system.</p>
+  </div>
+</div><!-- End .intro -->
+
+<div class="mod grid_16 mod-status-message warning"
+     tal:define="msg request.params.get('message')" tal:condition="msg">
+  <div class="mod-inner rounded-all">
+    <span class="icon"></span>
+    <div class="status-header">
+      <h3>${msg}</h3>
+    </div>
+  </div>
+</div>
+
+<div id="main-content" class="grid_16 main-content" role="main"
+     tal:condition="isanon">
+  <div class="content-inner clear-fix">
+    <div class="intro grid_16 alpha mod mod-login">
+      <div class="mod-inner rounded-all dropshadow-generic">
+	<p>You are logged in.  Check out your <a href="/dashboard.html">Dashboard</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+   
+<div id="main-content" class="grid_16 main-content" role="main"
+     tal:condition="not isanon">
+  <div class="content-inner clear-fix">
+    <div class="grid_8 alpha mod mod-login">
+      <div class="mod-inner rounded-all dropshadow-generic">
+
+        <form
+           id="ploud-login"
+           action="/login.html"
+           method="post">
+                    
+          <h2>Login</h2>
+                    
+          <div class="mod mod-status-message error hide">
+            <div class="mod-inner rounded-all">
+              <span class="icon"></span>
+              <div class="status-header">
+                <h3>header</h3>
+              </div>
+              <div class="status-content">
+                <p>msg</p>
+              </div>
+            </div>
+          </div>
+                    
+          <fieldset>
+            <legend>Login Information</legend>
+            <div class="field-block clear-fix clear-fix">
+              <div class="field-label">
+                <label for="login-email">
+                  <span class="req">&bull;</span> E-mail
+                </label>
+              </div>
+              <div class="field-input">
+                <input
+                   type="text"
+                   class="text rounded-all-inputs dropshadow-input"
+                   tabindex="1"
+                   id="login-email"
+                   name="login-email"
+                   autofocus="autofocus"
+                   />
+              </div>
+              <div class="field-note">
+                <p>You can use your <strong>e-mail</strong> address to register your account.</p>
+              </div>
+            </div>
+            <div class="field-block clear-fix clear-fix">
+              <div class="field-label">
+                <label for="login-password">
+                  <span class="req">&bull;</span> Password
+                </label>
+              </div>
+              <div class="field-input">
+                <input
+                   type="password"
+                   class="password rounded-all-inputs dropshadow-input"
+                   tabindex="2"
+                   id="login-password"
+                   name="login-password"
+                   />
+              </div>
+              <div class="field-note">
+                <p>Case sensitive, make sure caps lock is not enabled. <a href="/reset-password.html" class="colorbox modal-cta modal-cta-find:reset-password"><strong>Forgot password</strong></a>?</p>
+              </div>
+            </div>
+          </fieldset><!-- End fieldset -->
+          
+          <fieldset class="form-controls">
+            <legend>Login Submit</legend>
+            <div class="field-block clear-fix clear-fix submit-block">
+              <div class="field-input">
+                <button type="submit" class="button generic no-icon small-caps" tabindex="3">
+                  Login<span class="icon"></span>
+                </button>
+              </div>
+              <div class="field-note">
+                <dl class="legend clear-fix">
+                  <dt><span class="req">&bull;</span></dt>
+                  <dd>denotes a required field.</dd>
+                </dl>
+              </div>
+            </div>
+          </fieldset><!-- End fieldset -->
+        </form>
+      </div>
+    </div>
+    
+    <div class="grid_8 omega mod mod-signup">
+      <div class="mod-inner rounded-all dropshadow-generic">
+        
+        <form 
+           id="ploud-signup"
+           action="/signup"
+           method="post">
+          
+          <h2>Signup</h2>
+                    
+          <div class="mod mod-status-message success hide">
+            <div class="mod-inner rounded-all">
+              <span class="icon"></span>
+              <div class="status-header">
+                <h3>Activation code sent</h3>
+              </div>
+              <div class="status-content">
+                <p>Activation code has been sent to <span class="email">joe@user.com</span>.</p>
+                <div class="links">
+                  <ul>
+                    <li><a href="#">Link 1 (One-time Token Login)</a></li>
+                    <li><a href="#">Link 2 (Link To Plone Site)</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <fieldset>
+            <legend>Signup Information</legend>
+            <div class="field-block email-block clear-fix">
+              <div class="field-label">
+                <label for="">
+                  <span class="req">&bull;</span> E-mail
+                </label>
+              </div>
+              <div class="field-input">
+                <input
+                   type="text"
+                   class="text rounded-all-inputs dropshadow-input"
+                   placeholder=""
+                   tabindex="4"
+                   id="signup-email"
+                   name="signup-email"
+                   />
+              </div>
+              <div class="field-note">
+                <p>This is the username you will use to log in. It must be a valid e-mail address. <!--Your email address will not be displayed to any user or be shared with anyone else.--></p>
+              </div>
+            </div>
+            
+            <div class="field-block sitename-block clear-fix">
+              <div class="field-label">
+                <label for="signup-site-name" title="">
+                  <span class="req">&bull;</span> Site Name
+                </label>
+              </div>                    
+              <div class="field-input">
+                <input 
+                   id="signup-site-name" 
+                   name="signup-site-name" 
+                   class="text rounded-all-inputs dropshadow-input" 
+                   value="" 
+                   tabindex="5"
+                   type="text" />
+              </div>
+              <div class="field-note">
+                <p><span class="as-subdomain">.ploud.com</p>
+              </div>
+            </div>
+
+            <div class="field-block toc-block clear-fix">
+              <div class="field-label">
+                <label for="signup-accept-toc" title="">
+                  <span class="req">&bull;</span> Terms and Conditions
+                </label>
+              </div>
+              <div class="field-input">
+                <input
+                   id="signup-accept-toc"
+                   name="signup-accept-toc"
+                   class="text rounded-all-inputs dropshadow-input" 
+                   value="true"
+                   tabindex="5"
+                   checked
+                   type="checkbox" />
+              </div>
+              <div class="field-note">
+                <p>By checking this field you are accepting our <a href="/terms-of-service.html">Terms and Conditions</a></p>
+              </div>
+	    </div>
+          </fieldset><!-- End fieldset -->
+          
+          <fieldset class="form-controls">
+            <legend>Signup Submit</legend>
+            <div class="field-block clear-fix clear-fix submit-block">
+              <div class="field-input">
+                <button type="submit" class="button generic no-icon small-caps" tabindex="7">
+                  Signup<span class="icon"></span>
+                </button>
+              </div>
+              <div class="field-note">
+                <dl class="legend clear-fix">
+                  <dt><span class="req">&bull;</span></dt>
+                  <dd>denotes a required field.</dd>
+                </dl>
+              </div>
+            </div>
+          </fieldset><!-- End fieldset -->
+        </form>
+                
+      </div>
+    </div>
+  </div>
+</div><!-- End .main-content -->
+
+<div class="modal-content">
+        
+  <!--
+     Each modal must carry with it a container.
+    -->
+            
+  <div id="reset-password" class="mod mod-modal-resetpw container container_16 clear-fix">
+    <div class="mod-inner">
+                    
+      <div class="mod-modal-header">
+        
+        <h1>Reset Password</h1>
+        <div class="accessibility"><a href="/reset-password.html">View</a> as page.</div>
+        
+      </div>
+      <div class="">
+                    
+        <form
+           name=""
+           id="ploud-resetpw"
+           action="/reset-password.html"
+           method="post">
+          
+          <div class="mod mod-status-message success hide">
+            <div class="mod-inner rounded-all">
+              <span class="icon"></span>
+              <div class="status-header">
+                <h3>Status Message</h3>
+              </div>
+              <div class="status-content">
+                <p>Status message</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-description"></div>
+          
+          <fieldset>
+            
+            <div class="field-block">
+              <div class="field-label">
+                <label for="" title="Enter your e-mail address">
+                  <span class="req">&bull;</span> E-mail
+                </label>
+              </div>
+              <div class="field-input">
+                <input 
+                   id="login-email" 
+                   name="login-email"
+                   tabindex="1" 
+                   class="text rounded-all-inputs dropshadow-input" 
+                   value="" 
+                   type="text" 
+                   />
+              </div>
+              <div class="field-note">
+                <p>Enter your e-mail address.</p>
+              </div>
+            </div>
+            
+          </fieldset>
+          
+          <fieldset class="form-controls">
+            <div class="field-block clear-fix">
+              <div class="field-input">
+                <button class="button generic no-icon" 
+			value="Reset Password" type="submit">
+                  Reset Password
+                </button>
+              </div>  
+              <div class="field-note">
+                <dl class="legend clear-fix">
+                  <dt><span class="req">&bull;</span></dt>
+                  <dd>denotes a required field.</dd>
+                </dl>
+              </div>
+            </div>
+          </fieldset>
+
+          <input type="hidden" name="form.resetpw" value="1" />
+        </form>
+
+      </div>
+    </div>
+  </div><!-- End #reset-password -->
+</div> <!-- End #container -->

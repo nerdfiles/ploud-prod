@@ -1,0 +1,362 @@
+<!DOCTYPE 
+  html 
+  public "✰">
+
+<!--[if lt IE 7 ]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if IEMobile 7 ]>    <html class="no-js iem7" manifest="default.appcache?v=1"> <![endif]-->
+<!--[if (gt IEMobile 7)|(gte IE 9)|!(IE)|!(IEMobile)]><!--> <html class="no-js" lang="en" manifest="default.appcache?v=1"> <!--<![endif]-->
+
+<head tal:define="static view.static_url('ploud')">
+
+  <!-- Config -->
+  <meta charset="utf-8" />
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="IE=edge,chrome=1" />
+  
+  <!-- Mobile -->
+  <meta 
+    name="HandheldFriendly" 
+    content="True">
+  <meta 
+    name="MobileOptimized" 
+    content="320"/>
+  <meta 
+    name="viewport" 
+    content="initial-scale=1.0,user-scalable=yes,width=device-width" /> 
+  <meta 
+    http-equiv="cleartype" 
+    content="on">
+  
+  <!-- Prefetch -->
+  <link 
+    rel="dns-prefetch" 
+    href="//cdnjs.cloudflare.com" />
+  <link 
+    rel="dns-prefetch" 
+    href="//ajax.googleapis.com" />
+  <link 
+    rel="dns-prefetch" 
+    href="///ajax.aspnetcdn.com" />
+  
+  <!-- Meta -->
+  <title dir="ltr">Ploud</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  
+  <!-- Icon -->
+  <link 
+    rel="shortcut icon" 
+    href="/favicon.ico" />
+  <!--link 
+    rel="apple-touch-icon" 
+    href="/apple-touch-icon.png" /-->
+  
+  <!-- CSS -->
+  <link 
+    rel="stylesheet" 
+    href="${static}/_css-lib/960-Grid-System/code/css/min/compiled.css" 
+    media="all" />
+  <link
+    rel="stylesheet" 
+    href="${static}/_css-lib/colorbox/ploud-ui/colorbox.css" 
+    media="all" />
+  <link 
+    rel="stylesheet" 
+    href="${static}/_css/global.css" 
+    media="all" />
+
+  <tal:block content="structure view.render_includes()" />
+
+  <!--link 
+    rel="stylesheet" 
+    href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css"
+    media="screen and (max-device-width: 480px)" /-->
+  
+  <!-- Scripts -->
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
+  <script>
+    Modernizr || document.write('<script src="${static}/_js-lib/modernizr/2.0.6/modernizr.min.js"><\/script>');
+  </script>
+
+</head>
+
+<body class="ploud-net" 
+  tal:define="path request.path_info.replace('/', '').replace('.html', '');
+              static view.static_url('ploud')"
+  tal:attributes="class python:'ploud-net page-' + path if path else 'ploud-net page-home'">
+  
+  <div class="container container_16 clear-fix" dir="ltr">
+    
+    <div class="access accessibly-hide">
+      <div class="content-inner">
+        <ul>
+          <li><a href="#main-content">Skip to Content</a></li>
+        </ul>
+      </div>
+    </div><!-- End .access -->
+    
+    <div class="header grid_16">
+      <div class="content-inner clear-fix">
+        <div class="logo grid_6 alpha">
+          <a href="/index.html" title="Ploud">Ploud</a>
+          <span class="release-type">Beta</span>
+        </div>
+	
+	<div class="mod mod-membership" 
+	     tal:condition="not view.isanon">
+          <div class="mod-inner rounded-all dropshadow-generic">
+            <a href="/membership-${view.policy_id}.html" 
+	       class="member member-type-1">${view.membership}<span class="rounded-all type">
+		${view.price}/${view.policy.sites} sites</span></a>
+            <div class="member-type-details">
+              <h3>${view.policy.title}</h3>
+              <p>${view.policy.description}</p>
+              <table>
+                <tr>
+                  <th>Remaining sites</th>
+                  <td>${view.sites}</td>
+                </tr>
+                <tr>
+                  <th>Remaining deletes</th>
+                  <td>${view.removes}</td>
+                </tr>
+                <tr>
+                  <th>Remaining transfers</th>
+                  <td>${view.transfers}</td>
+                </tr>
+              </table>
+            </div>
+            <ul class="member-controls">            
+              <li><a href="/change-password.html" class="colorbox modal-cta modal-cta-find:change-user-password">Change Password</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div><!-- End .header -->
+    
+    <div class="global-header">
+      <div class="content-inner">
+        <ul class="global-nav ~hide" tal:condition="not view.isanon">
+          <li class="principal" tal:content="view.principal"><a href="https://profiles.google.com/nerdfiles/">{{ view.principal }}</a></li>
+          <li class="membership"><a href="/membership.html">Membership</a></li>
+          <li class="dashboard"><a href="/dashboard.html">Dashboard</a></li>
+          <li class="management" tal:condition="view.manager"><a href="/ptah-manage/">Management</a></li>
+          <li class="logout"><a href="/logout.html">Logout</a></li>
+        </ul>
+      </div>
+    </div><!-- End .global-header -->
+
+    <!-- Main Content Block -->
+    ${content}
+
+    <!-- footer -->
+    <div class="footer grid_16">
+      <div class="content-inner">
+        <p><small class="copyright">&copy; 2011, <a href="http://www.enfoldsystems.com/" rel="external">Enfold Systems</a>, Inc. &mdash; The Plone Experts.</small></p>
+        <ul class="inline">
+          <li class="terms-of-service"><a href="terms-of-service.html" class="colorbox modal-cta modal-cta-find:terms-of-service" data-rel="dialog">Terms and Conditions</a></li>
+          <li class="privacy-policy"><a href="privacy-policy.html" class="colorbox modal-cta modal-cta-find:privacy-policy" data-rel="dialog">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div><!-- End .footer -->
+    
+    <div class="modal-content">
+      <!--
+         Each modal must carry with it a container.
+	-->
+      
+      <div id="change-user-password" class="mod mod-modal-changepw container container_16 clear-fix">
+        <div class="mod-inner">
+          
+          <div class="mod-modal-header">
+            <h1>Change Password</h1>
+            <div class="accessibility"><a href="/change-password.html">View</a> as page.</div>
+          </div>
+            
+          <div class="mod-modal-content">                
+            <form
+               id="ploud-changepw"
+               action="/change-password.html"
+               method="post">
+              
+              <fieldset>
+                <div class="field-block clear-fix">
+                  <div class="field-label">
+                    <label for="change-password">Change Password</label>
+                  </div>
+                  <div class="field-input">
+                    <input
+                       id="change-password"
+                       name="change-password"
+                       class="text rounded-all-inputs dropshadow-input"
+                       type="password"
+                       />
+                  </div>
+                </div><!-- End .field-block -->
+                
+                <div class="field-block clear-fix">
+                  <div class="field-label">
+                    <label for="confirm-password">Confirm Password</label>
+                  </div>
+                  <div class="field-input">
+                    <input
+                       id="confirm-password"
+                       name="confirm-password"
+                       class="text rounded-all-inputs dropshadow-input"
+                       type="password"
+                       />
+                    </div>
+                </div><!-- End .field-block -->
+              </fieldset>
+              
+              <fieldset class="form-controls">
+                <div class="field-block clear-fix">
+                  <div class="field-input">
+                    <button type="submit" 
+			    name="form-change"
+			    class="button generic no-icon">
+                      Change Password<span class="icon"></span>
+                    </button>
+		  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div><!-- End .mod-modal-changepw -->
+      <div id="privacy-policy" class="mod mod-modal-pp container container_16 clear-fix">
+        <div class="mod-inner">
+          <div class="mod-modal-header">
+            
+            <h1>Privacy Policy</h1>
+            <div class="accessibility"><a href="/privacy-policy.html">View</a> as page.</div>
+          </div>
+          
+          <div class="mod-modal-content">
+            <p>Enfold Systems, Inc. operates the Ploud website and we respect your right, and your users rights, to personal privacy. We will collect and use information through our Web site only in the ways disclosed in this statement. This statement applies solely to information collected on this Web site.</p>
+            <h2>How We Protect Your Information</h2>
+            <p>We protect user information with secure servers, SSL encryption and other technology and procedures for protecting consumer privacy.</p>
+            <h2>How We Collect Your Information</h2>
+            <p>We collect data that is not personally identifiable information, including IP address, referring Web site and other metrics as tracked by Google® Analytics. We collect personally identifiable information through registration forms, server logging and upon purchase of our products.<br>
+              We do employ cookies. A cookie is a small text file our Web server places on your computer hard drive to be a unique identifier. Our cookies do not have an expiration date. They do collect personally identifiable information, including your user name for our Web site.</p>
+            <h2>How We Use Your Information</h2>
+            <p>We will use the information we collect for customer purchases, order processing, support, maintenance, Web site access and marketing effectiveness.</p>
+            <p>Registered users may receive additional announcements from us about products, services, special offers or a newsletter. Out of respect for your privacy, we give you the option not to receive these types of communications.</p>
+            <p>We will use the information we collect to create customer profiles based on browsing or purchasing history. We may supplement information we collect at our Web site with data from other sources, such as credit history, to authorize purchases.</p>
+            <p>We may share data with third parties such as credit card processing and fulfillment companies. These third parties will use the information to process your order.</p>
+            <p>We offer links to other Web sites. When you click on links to other Web sites, we encourage you to read their privacy policies. Their standards may differ from ours.</p>
+            <p>Our Web site offers issue trackers (support collectors) to help customers, users and clients resolve problems with our products and services. Please note that information you post in these venues may become public knowledge.</p>
+            <h2>How to Change Your Information</h2>
+            <p>You may access and edit your own personal information, or contact us at <a href="mailto:customerservice@enfoldsystems.com" title="Send an e-mail message">customerservice@enfoldsystems.com</a> to report any inaccuracies you find.</p>
+            <h2>How to Resolve a Problem</h2>
+            <p>If a problem arises, please e-mail us at <a href="mailto:customerservice@enfoldsystems.com" title="Send an e-mail message">customerservice@enfoldsystems.com</a>. We are committed to resolving issues within five business days.</p>
+                                                
+          </div>
+        </div>
+      </div><!-- End #privacy-policy -->
+            
+      <div id="terms-of-service" class="mod mod-modal-tos container container_16 clear-fix">
+        <div class="mod-inner">
+          <div class="mod-modal-header">
+                    
+            <h1>Terms and Conditions</h1>
+            <div class="accessibility"><a href="/terms-of-service.html">View</a> as page.</div>
+          </div>
+          <div class="mod-modal-content">
+                    
+            <p>Welcome to Ploud, operated by Enfold Systems, Inc (“Enfold”). &nbsp;The terms set forth below (the “Agreement”) govern your use of Ploud. By using or operating on Ploud, you expressly agree to be bound by this Agreement and to follow all of its terms and any applicable laws and regulations. &nbsp;If you do not agree with any of the following terms, immediately discontinue your use of Ploud. &nbsp;If you have any questions about these Terms and Conditions, contact <a href="mailto:ploud@enfoldsystems.com">ploud@enfoldsystems.com</a>.</p>
+            <ol>
+              <li>You understand and acknowledge that Ploud is being provided to you “AS IS” and “AS AVAILABLE”, for the purpose of evaluation and testing. &nbsp;Your use of the Ploud is entirely at your own risk. &nbsp;Enfold reserves the right to modify, suspend or stop Ploud (or any part thereof), either temporarily or permanently, at any time, or from time to time, with or without notice to you.</li>
+              <li>This Agreement does NOT provide, nor obligate Enfold to provide, any support in connection with Ploud. &nbsp;Any support shall be agreed to in a separate agreement between you and Enfold.</li>
+              <li>You agree to NOT:
+                <ol>
+                  <li>Interfere or attempt to interfere with Ploud including, but not limited to, its software, servers or user activities on Ploud.</li>
+                  <li>Use any software or intellectual property in conjunction with Ploud for which you do not have a valid license; nor engage in or facilitate the illegal export of any restricted or controlled items including, but not limited to, software or data subject to export laws.</li>
+                  <li>Use Ploud to post, transmit, facilitate, or link to content that is pornography, sexually explicit, or adult in nature.</li>
+                  <li>Use Ploud to promote, facilitate or permit gambling or illegal activities, including but not limited to, child pornography, libelous, defamatory or otherwise malicious information.</li>
+                  <li>Use Ploud to promote or facilitate activities that contain threats or incite violence, are harmful to any person or entity, or are discriminatory based on race, sex, religion, nationality, disability, sexual orientation or age.</li>
+                  <li>Impersonate any person or entity, or otherwise misrepresent your affiliation with any person or entity.</li>
+                  <li>Use Ploud to post, upload or transmit any content or other material that is fraudulent or &nbsp;that violates, misappropriates, or infringes on the rights of others.</li>
+                  <li>Use Ploud to post, upload or transmit any information, software or other material that contains viruses, unauthorized data, malware, Trojan horses, spyware, worms or other harmful or corrupted components.</li>
+                </ol>
+              </li>
+              <li>While using Ploud, you agree to comply with all applicable laws and regulations including the Children’s Online Privacy Protection Act (“COPPA”).</li>
+              <li>Any information you provide to Enfold related to your use of Ploud including, but not limited to, comments, suggestions, data, or other information; may be retained and used in current or future activities or versions of Ploud, without compensation to you. To the extent such Information is protectable under intellectual property laws, you assign your rights in such Information to Enfold and agree to assist Enfold in perfecting those rights.</li>
+              <li>PLOUD IS PROVIDED “AS IS” WITH NO WARRANTY OF ANY KIND AND YOU USE PLOUD AT YOUR OWN RISK. ENFOLD, ITS OFFICERS, DIRECTORS, EMPLOYEES AND LICENSORS EXPRESSLY DISCLAIMS ANY WARRANTY, EXPRESS OR IMPLIED, REGARDING PLOUD OR ITS CONTENT, INCLUDING BUT NOT LIMITED TO ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. ANY MATERIAL TRANSMITTED, STORED, ACCESSED OR OTHERWISE MAINTAINED THROUGH THE USE OF PLOUD IS DONE AT YOUR OWN DISCRETION AND RISK. Some states do not allow the exclusion of some warranties, so the above exclusions may not apply.</li>
+              <li>Ploud is experimental in nature, and Enfold does not represent that it is reliable, accurate, complete, or otherwise valid. ACCORDINGLY, YOU EXPRESSLY UNDERSTAND AND AGREE THAT UNDER NO CIRCUMSTANCES WILL ENFOLD BE LIABLE TO YOU FOR ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL OR EXEMPLARY DAMAGES ARISING OUT OF OR IN CONNECTION WITH YOUR USE OF PLOUD. UNDER NO CIRCUMSTANCES SHALL ENFOLD BE LIABLE TO YOU FOR ANY AMOUNT. Some states do not allow the exclusion or limitation of incidental or consequential damages, so the above limitation and exclusions may not apply.</li>
+              <li>To the maximum extent permitted by applicable law, you hereby release, and waive all claims against Enfold and its officers, directors, employees and agents from any and all liability for claims, damages (actual and consequential), costs and expenses (including litigation costs and attorneys’ fees) of every kind and nature, arising out of or in any way connected with your use of Ploud.</li>
+              <li>This Agreement expires when you use Ploud on its commercial terms. &nbsp;Your subsequent use of Ploud will be subject to those commercial terms and conditions. Enfold has the right to modify the terms of this Agreement at any time, which modification shall be effective immediately upon posting to Ploud.</li>
+              <li>The software that Ploud is based upon is the intellectual property of, and is owned by, Enfold. &nbsp;The structure, organization and code of the software are the valuable trade secrets and confidential information of Enfold. &nbsp;The software is protected by law, including without limitation the copyright laws of the United States and other countries, and by international treaty provisions. &nbsp;Except as expressly stated herein, this Agreement does not grant you any intellectual property rights in the software and all rights not expressly granted are reserved by</li>
+              <li>Either party may terminate this Agreement at any time, with or without cause, upon notice to the other party. &nbsp;In addition to any legal remedies that Enfold may have for your violation of the terms of this Agreement, Enfold shall also have the right, in its sole discretion, to suspend or terminate your access to Ploud.</li>
+              <li>You agree to hold harmless and indemnify Enfold, and its employees, agents and representatives, from and against any third party claim arising from or in any way related to your use of Ploud, including any liability or expense arising from all claims, losses, damages (actual and consequential), suits, judgments, litigation costs and attorneys’ fees, of every kind and nature.</li>
+              <li>You shall not assign nor delegate any of your rights or obligations under this Agreement without the prior written consent of Enfold.</li>
+              <li>This Agreement, in combination with Ploud Privacy Policy, available at <a href="http://ploud.com/">http://ploud.com</a>, set forth the terms and conditions under which Enfold Systems makes Ploud available to you. &nbsp;This constitutes the entire agreement of the parties with respect to the subject matter hereof and supersedes any other prior or contemporaneous written, verbal, or implied agreements concerning the subject matter hereof. Any addition or amendment to this Agreement shall be effective only if agreed to in writing, signed by both parties. &nbsp;No failure or delay in enforcing any right will be deemed a waiver.</li>
+              <li>In the event that any of the provisions of this Agreement shall be held by a court or other tribunal of competent jurisdiction to be illegal, invalid, or unenforceable, such provisions shall be limited or eliminated to the minimum extent necessary so that this Agreement shall otherwise remain in full force and effect.</li>
+              <li>This Agreement shall be governed by the laws of the State of Texas without regard to the conflicts of law provisions of any other jurisdiction. &nbsp;Jurisdiction and venue for all disputes arising under this Agreement shall be in a court of competent jurisdiction in Harris County, Texas U.S.A.</li>
+            </ol>
+          </div>
+          
+          <div class="mod-modal-controls hide">
+            <ul>
+              <li>
+                <button type="submit" class="button generic no-icon ok-button">
+                  Accept<span class="icon"></span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div><!-- End #terms-of-service -->
+            
+      <!-- Additional Modal Content -->
+    </div><!-- End .modal-content -->
+  </div> <!-- End #container -->
+  
+  <script> 
+    Modernizr.load([
+      {
+        load: '//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js',
+        complete: function () {
+          
+          if ( !window.jQuery ) {
+            Modernizr.load('${static}/_js-lib/jquery/1.6.4/jquery.min.js');
+          }
+        
+          if (Modernizr.touch) {
+            //Modernizr.load('http://code.jquery.com/mobile/latest/jquery.mobile.min.js');
+            window.scrollTo(0, 1);
+          }
+          
+          Modernizr.load('${static}/_js-lib/jquery.colorbox-min.js');
+          Modernizr.load('${static}/_js-lib/jquery.metadata.js');
+          Modernizr.load('//ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js');
+          Modernizr.load('//ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/additional-methods.min.js');
+          Modernizr.load('${static}/_js/global.js');
+          
+        }
+      }
+    ]);
+    
+    window._gaq = [
+      ['_setAccount', 'UA-26600834-1'],
+      ['_setDomainName', '.ploud.com'],
+      ['_trackPageview'],
+      ['_trackPageLoadTime']
+    ];
+    
+    Modernizr.load({
+      load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
+    });
+  </script>
+  
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
+</body>
+
+</html>

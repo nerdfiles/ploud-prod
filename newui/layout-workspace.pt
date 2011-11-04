@@ -1,0 +1,7 @@
+<div style="margin-top: 60px;">
+  <div class="inner">
+    <div class="container">
+      <tal:block content="structure content" />
+    </div>
+  </div>
+</div>

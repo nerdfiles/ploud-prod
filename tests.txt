@@ -1,0 +1,52 @@
+===============================
+Ploud Frontend Functional tests
+===============================
+
+    >>> from memphis import view
+    >>> from webob.multidict import MultiDict
+    >>> from pyramid.testing import DummyRequest
+
+    >>> Root = view.Root
+
+
+homepage
+--------
+
+    >>> print view.renderView('index.html', Root, DummyRequest())
+    200 OK
+    ...
+    <li><a href="/signup.html">Sign up</a> |</li>
+    <li><a href="/login.html">Log in </a></li>
+    ...
+    <h3>How do I get started?</h3>
+    <p>
+       <a id="register" href="/signup.html">Sign up</a> or
+       <a id="login" href="/login.html">log in</a>.
+    </p>
+    ...
+    </html>
+
+
+sign up
+-------
+
+    >>> print view.renderView('signup.html', Root, DummyRequest())
+    200 OK
+    ...
+    </html>
+   
+    >>> params = [('_charset_', u'UTF-8'), \
+    ...   ('__formid__', u'deform'), ('email', u'fafhrd@datacom.kz'), 
+    ...   ('__start__', u'password:mapping'), ('value', u'12345'), 
+    ...   ('confirm', u'12345'), ('__end__', u'password:mapping'), 
+    ...   ('submit', u'submit')]
+
+    >>> response = view.renderView('signup.html', Root,
+    ...     DummyRequest(
+    ...         params=MultiDict(params)))
+
+    >>> response.location
+    '/dashboard.html'
+
+# check for user entry in 'users' table
+

@@ -1,0 +1,433 @@
+<div id="main-content" class="grid_16 main-content" role="main">
+  <div class="content-inner clear-fix"
+    tal:define="allowCreate view.allowCreate">
+    
+    <h1>Dashboard</h1>
+    
+    <div class="mod mod-status-message warning hide">
+      <div class="mod-inner rounded-all">
+        <span class="icon"></span>
+        <div class="status-header">
+          <h3>Dashboard</h3>
+        </div>
+        <div class="status-content" tal:define="msg request.GET.get('msg')"
+    	 tal:condition="msg">
+          <p>${msg}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mod mod-status-message warning ~hide"
+	 tal:condition="view.user.type == 98">
+      <div class="mod-inner rounded-all">
+        <span class="icon"></span>
+        <div class="status-header">
+          <h3>Please validate your signup e-mail</h3>
+        </div>
+        <div class="status-content">
+          <p>Please validate your e-mail address. If your e-mail address is not validated within 24 hours your account will be deleted.</p>
+        </div>
+
+        <div class="status-header" tal:define="msg request.params.get('message')"
+	     tal:condition="msg">
+	  <h3>${msg}</h3>
+	</div>
+      </div>
+    </div>
+
+    <tal:block tal:condition="view.user.type != 98">
+      <div class="mod mod-status-message warning ~hide"
+	   tal:define="msg request.params.get('message')" tal:condition="msg">
+	<div class="mod-inner rounded-all">
+          <div class="status-header">
+	    <h3>${msg}</h3>
+	  </div>
+	</div>
+      </div>
+    </tal:block>
+    
+    <div class="grid_8 alpha">
+      
+      <div class="grid_8 alpha mod mod-create-site">
+        <div class="mod-inner rounded-all dropshadow-generic">
+                
+	  <div tal:condition="not allowCreate">
+            <h2>Site Quota Reached</h2>
+
+	    <p>
+	      Your membership level requires you to upgrade to create new sites. 
+	      Check <a href="/membership.html">membership page</a> to 
+	      find out more about the membership levels.</p>
+
+	      <table>
+		<tr>
+		  <th>Number of sites:</th> 
+		  <td>${view.policy.sites}</td>
+		</tr>
+		<tr>
+		  <th>Database quota:</th> 
+		  <td>${view.format.size(view.policy.dbsize, 'm')}</td>
+		</tr>
+		<tr>
+		  <th>Bandwidth quota:</th> 
+		  <td>${view.format.size(view.policy.bandwidth, 'm')}</td>
+		</tr>
+		<tr>
+		  <th>Max filesize:</th> 
+		  <td>${view.format.size(view.policy.filesize, 'm')}</td>
+		</tr>
+		<tr>
+		  <th>Search bots:</th> 
+		  <td>${view.policy.bots and 'allowed' or 'not allowed'}</td>
+		</tr>
+		<tr>
+		  <th>Custom hostname:</th> 
+		  <td>${view.policy.vhosts and 'allowed' or 'not allowed'}</td>
+		</tr>
+		<tr>
+		  <th>Site removes:</th> 
+		  <td>${view.policy.removes and view.policy.removes or 'not allowed'}</td>
+		</tr>
+		<tr>
+		  <th>Site transfers:</th> 
+		  <td>${view.policy.transfers and view.policy.transfers or 'not allowed'}</td>
+		</tr>
+	      </table>
+	  </div>
+
+          <form 
+             id="ploud-createsite"
+             action="/dashboard.html" 
+             method="post" tal:condition="allowCreate">
+            
+            <h2>Create a New Site</h2>
+              
+            <div class="mod mod-status-message error hide">
+              <div class="mod-inner rounded-all">
+                <span class="icon"></span>
+                <div class="status-header">
+                    <h3>header</h3>
+                </div>
+                <div class="status-content">
+                    <p>msg</p>
+                </div>
+              </div>
+            </div>
+            <fieldset>
+              <div class="field-block clear-fix">
+                <div class="field-label">
+                  <label for="createsite-site-name" title="">
+                    <span class="req">&bull;</span> Site Name
+                  </label>
+                </div>                    
+                <div class="field-input">
+                  <input 
+                     id="createsite-site-name" 
+                     name="createsite-site-name" 
+                     class="text rounded-all-inputs dropshadow-input" 
+                     value="${request.POST.get('createsite-site-name')}" 
+                     type="text" />
+                </div>
+                <div class="field-note">
+                  <p><span class="as-subdomain">.ploud.com</p>
+		</div>
+		<label for="createsite-site-name" class="error"
+		       tal:condition="'createsite-site-name' in view.status">
+		  ${view.status['createsite-site-name']}
+		</label>
+	      </div>
+	      
+	      <div class="field-block clear-fix">
+		<div class="field-label">
+                  <label for="site-type">
+                    <span class="req">&bull;</span> Site Type
+                  </label>
+                </div>
+                <div class="field-input">
+                  <select 
+                     id="createsite-site-type" 
+                     class="select" 
+                     name="createsite-site-type"
+		     tal:define="val request.POST.get('createsite-site-type')">
+                    
+                    <option value="">Select a Site Type</option>
+		    <option tal:repeat="st view.siteChoices()"
+			    value="${st[0]}"
+			    tal:attributes="selected st[0] == val">
+		      ${st[1]}</option>
+                  </select>
+                </div>
+		<label for="createsite-site-type" class="error"
+		       tal:condition="'createsite-site-type' in view.status">
+		  ${view.status['createsite-site-type']}
+		</label>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-controls">
+              <div class="field-block clear-fix clear-fix submit-block">
+                <div class="field-input">
+                  <button type="submit" class="button generic no-icon small-caps"
+			  name="form-create-site" value="1">
+                    Create Site<span class="icon"></span>
+                  </button>
+                </div>
+                <div class="field-note">
+                  <dl class="legend clear-fix">
+                    <dt><span class="req">&bull;</span></dt>
+                    <dd>denotes a required field.</dd>
+                  </dl>
+                </div>
+              </div>
+            </fieldset><!-- End fieldset -->
+          </form>
+
+        </div>
+      </div><!-- End .mod-create-site -->
+      
+    </div><!-- Column 1 -->
+      
+    <div class="grid_8 omega" 
+      tal:attributes="class python:'grid_8 omega' if allowCreate else 'grid_8 alpha'">
+      
+      <div class="grid_8 alpha mod mod-existing-sites">
+        <div class="mod-inner rounded-all dropshadow-generic">
+          
+          <h2>Your Existing Sites</h2>
+                      
+          <table class="mod mod-sites-stats">
+            <tbody>
+              <tr class="sites-db-usage">
+                <th>Total Database:</th>
+		<td>${stats['db']} (${stats['db_pc']}% of ${stats['db_to']})</td>
+              </tr>
+              <tr class="sites-bw-usage">
+                <th>Total Bandwidth:</th>
+		<td>${stats['bw']} (${stats['bw_pc']}% of ${stats['bw_to']})</td>
+              </tr>
+              <tr class="sites-vhost hide">
+                <th>Virtual hosts:</th>
+		<td><tal:block content="python:stats['vhosts'] and 'Supported' or 'Disabled'"/></td>
+              </tr>
+              <tr class="sites-bots hide">
+                <th>Search bots:</th>
+		<td><tal:block content="python:stats['bots'] and 'Supported' or 'Disabled'"/></td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <p class="hide">If you have vhost controls, set vhost domain to <span class="domain">209.143.152.138</span>.</p>
+                
+          <ul>
+            <li class="site clear-fix" tal:repeat="info urls">
+              <div class="site-info">
+		<a class="site-address rounded-all-half" 
+		   href="${info['url']}"
+		   style="${info['disabled'] and 'text-decoration: line-through;;' or 'weight: bold'}">${info['url']}</a>
+                <table class="mod mod-site-stats">
+                  <tr class="site-size">
+                    <th>Size:</th>
+                    <td>${info['db']}</td>
+                  </tr>
+                  <tr class="site-bandwidth">
+                    <th>Bandwidth:</th>
+                    <td>${info['bw']}</td>
+                  </tr>
+                </table>
+              </div>
+              
+              <div class="site-actions">
+                <fieldset>
+                  <ul class="inline">
+                    <li>
+                      <!--button type="submit" name="action" value="login"
+                      class="button generic icon-login no-icon iconish" title="Login using your ploud.com Account">
+                      Login<span class="icon"></span>
+                      </button-->
+                      <a target="_blank" 
+                      href="/actions.html/login?site_id=${info['id']}" class="button generic icon-login no-icon iconish">
+                      Login<span class="icon"></span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#options" class="button generic icon-options icon-tiny iconish" title="Options"><span class="icon"></span></a>
+                      <div class="site-actions-menu">
+                        <span class="header">Options</span>
+                        <span class="close rounded-circular">x</span>                                                    
+                        <ul class="menu">
+                          <li><a href="../change-name-1/index.html" class="colorbox disabled-anchor modal-cta modal-cta-find:change-name-1" title="Change the URL of this site">Change name</a></li>
+                          <li><a
+				 site="${info['id']}"
+				 href="${info['url']}"
+				 class="${view.allowTransfer and 'action_transfer colorbox modal-cta modal-cta-find:transfer-1' or 'action_transfer colorbox disabled-anchor modal-cta modal-cta-find:transfer-1'}" 
+				 title="Transfer ownership of this site">Transfer</a></li>
+                          <li><a 
+				 site="${info['id']}"
+				 href="${info['url']}"
+				 class="${view.allowRemove and 'action_remove colorbox modal-cta modal-cta-find:remove-1' or 'action_remove colorbox disabled-anchor modal-cta modal-cta-find:remove-1'}" title="Remove this site">Remove</a></li>
+                        </ul>
+		      </div>
+                    </li>
+                  </ul>
+                </fieldset>
+	      </div>
+	    </li>
+	  </ul>
+	</div>
+      </div><!-- End .mod-existing-sites -->
+      
+    </div><!-- Column 2 -->
+  </div>
+</div><!-- End .main-content -->
+
+       
+<!-- Additional Modal content -->
+<div class="modal-content">
+
+  <div id="change-name-1" class="mod mod-modal-changename container container_16 clear-fix">
+    <div class="mod-inner">
+      
+      <div class="mod-modal-header">
+        <h1>Change Site Name</h1>
+      </div>
+        
+      <div class="mod-modal-content">                
+	<form
+           id="ploud-changenameofsite"
+           name=""
+           action="http://127.0.0.1:8080/change-name-1/"
+           method="get">
+          
+          <fieldset>
+            
+            <div class="field-block clear-fix">
+              <div class="field-label">
+		<label for="changenameofsite-sitename">
+                  <span class="req">&bull;</span> Site Name
+		</label>
+              </div>
+              <div class="field-input">
+		<input
+                   id="changenameofsite-sitename"
+                   name="changenameofsite-sitename"
+                   class="text rounded-all-inputs dropshadow-input"
+                   type="text"
+                   value=""
+                   />
+              </div>
+              <div class="field-note">
+		<p><span class="as-subdomain">.ploud.com</span></p>
+              </div>
+            </div><!-- End .field-block -->
+          </fieldset>
+          
+          <fieldset class="form-controls">
+            <div class="field-block clear-fix clear-fix submit-block">
+              <div class="field-input">
+		<button type="submit" class="button generic no-icon small-caps">
+                  Change Name<span class="icon"></span>
+		</button>
+              </div>
+              <div class="field-note">
+		<dl class="legend clear-fix">
+                  <dt><span class="req">&bull;</span></dt>
+                  <dd>denotes a required field.</dd>
+		</dl>
+              </div>
+            </div>
+          </fieldset><!-- End fieldset -->
+          
+	</form>
+      </div>
+      
+    </div>
+  </div><!-- End .mod-modal-changename -->
+  
+<div id="remove-1" class="mod mod-modal-remove container container_16 clear-fix">
+  <div class="mod-inner">
+    <div class="mod-modal-header">
+      
+      <h1>Remove this site <span class="sitename"></span>?</h1>
+    </div>
+    
+    <div class="mod-modal-content">
+      <form action="/actions.html/remove" id="ploud-removesite" method="post">
+	<input id="ploud-remove-site" type="hidden" name="site_id" />
+        
+        <fieldset class="form-controls">
+          <div class="field-block clear-fix clear-fix submit-block">
+            <div class="field-input">
+              <button type="submit" class="button generic no-icon small-caps">
+                Remove Site<span class="icon"></span>
+              </button>
+            </div>
+          </div>
+        </fieldset><!-- End fieldset -->
+      </form>
+    </div>
+  </div>
+</div><!-- End .mod-modal-remove -->
+
+<div id="transfer-1" class="mod mod-modal-transfer container container_16 clear-fix">
+  <div class="mod-inner">
+    
+    <div class="mod-modal-header">
+      <h1>Transfer</h1>
+    </div>
+    
+    <div class="mod-modal-content">
+      <form
+         id="ploud-transfer"
+         name=""
+         action="/actions.html/transfer"
+         method="post">
+	<input id="ploud-transfer-site" type="hidden" name="site_id" />
+        
+        <fieldset>
+          <div class="field-block clear-fix">
+            <div class="field-label">
+              <label for="changenameofsite-sitename">
+                <span class="req">&bull;</span> New Owner E-mail
+              </label>
+            </div>
+            <div class="field-input">
+              <input
+                 id="transfer-newowner"
+                 name="newowner"
+                 class="text rounded-all-inputs dropshadow-input"
+                 type="text"
+                 value=""
+                 />
+            </div>
+            <div class="field-note">
+              <p>Enter the e-mail account of this site's new owner.</p>
+            </div>
+          </div><!-- End .field-block -->
+          
+        </fieldset>
+        
+        <fieldset class="form-controls">
+          <div class="field-block clear-fix clear-fix submit-block">
+            <div class="field-input">
+              <button type="submit" class="button generic no-icon small-caps"
+		      name="trasfer-submit">
+                Transfer Ownership<span class="icon"></span>
+              </button>
+            </div>
+            <div class="field-note">
+              <dl class="legend clear-fix">
+                <dt><span class="req">&bull;</span></dt>
+                <dd>denotes a required field.</dd>
+              </dl>
+            </div>
+          </div>
+        </fieldset><!-- End fieldset -->
+        
+      </form>
+    </div>
+    
+  </div>
+</div><!-- End .mod-modal-transfer -->
+
+<!-- End Additional Modal content -->
+</div>

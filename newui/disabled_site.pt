@@ -1,0 +1,6 @@
+<div>
+  <p>
+    You have reached a disabled site on ploud.com
+  </p>
+  <p tal:condition="request.get('referer')">${request.get('referer')}</p>
+</div>

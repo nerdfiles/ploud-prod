@@ -1,0 +1,10 @@
+<div id="main-content" class="grid_16 main-content" role="main">
+  <div class="content-inner clear-fix">
+  
+  <h1>Page not found</h1>
+  <p>You have attempted to reach a site which does not exist.</p>
+  <p tal:define="referer request.get('referer')"
+     tal:condition="referer">${referer}</p>
+     
+  </div>
+</div>

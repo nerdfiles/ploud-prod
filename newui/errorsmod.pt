@@ -1,0 +1,24 @@
+<div class="page-header">
+  <h1>Ploud errors</h1>
+</div>
+
+<div class="row">
+  <div class="span16 columns">
+    <table class="zebra-stripped">
+      <tr>
+        <th>Id</th>
+        <th>Time</th>
+        <th>Host</th>
+        <th>Path</th>
+        <th>Fixed</th>
+      </tr>
+      <tr tal:repeat="error view.errors">
+	<td><a href="${error.id}/">${error.id}</a></td>
+	<td><a href="${error.id}/">${error.time}</a></td>
+	<td tal:content="python:error.host" />
+	<td tal:content="python:error.path" />
+	<td tal:content="python:error.fixed" />
+      </tr>
+    </table>
+  </div>
+</div>

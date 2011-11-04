@@ -1,0 +1,85 @@
+<div id="main-content" class="grid_16 main-content" role="main">
+  <div class="content-inner clear-fix" tal:condition="view.error">
+    <div class="grid_16 alpha mod mod-login" tal:define="error view.error">
+      <div class="mod-inner rounded-all dropshadow-generic">
+	<h1><a href="/errors.html">Back to Ploud Errors</a></h1>
+
+	<table class="info">
+	  <tr>
+	    <td>Id:</td><td>${error.id}</td>
+	  </tr>
+	  <tr>
+	    <td>Time:</td><td>${error.time}</td>
+	  </tr>
+	  <tr>
+	    <td>URL:</td>
+	<td>
+	  <a href="http://${error.host}/${error.path.split(':',1)[-1]}">
+	    ${error.host} ${error.path}
+	  </a>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Fixed:</td>
+	    <td>${error.fixed}</td>
+	  </tr>
+	</table>
+	
+	<div style="font-size:85%">
+	  <br />
+	  <h3>Traceback</h3>
+	  <pre tal:content="error.traceback">
+	  </pre>
+	  
+	  <div id="disqus_thread"></div>
+	  <script type="text/javascript">
+	    var disqus_shortname = 'ploud-errors';
+	    
+	    var disqus_identifier = 'ploud-error-${error.id}';
+	    var disqus_url = 'http://ploud.com/errors.html?eid=${error.id}';
+	    
+	    (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	  </script>
+	  
+	  <br />
+	  <h3>Eggs Working Set</h3>
+	  <div tal:define="ws str(error.workingset).split(','); dummy ws.sort()">
+	    <tal:block tal:repeat="item ws">
+	      ${item}
+	      <br />
+	    </tal:block>
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-inner clear-fix" tal:condition="python:not view.error">
+    <div class="grid_16 alpha mod mod-login">
+      <div class="mod-inner rounded-all dropshadow-generic">
+	<h2>Ploud errors</h2>
+	
+	<table class="info">
+	  <tr>
+            <th>Id</th>
+            <th>Time</th>
+            <th>Host</th>
+            <th>Path</th>
+            <th>Fixed</th>
+	  </tr>
+	  <tr tal:repeat="error view.errors">
+	    <td><a href="/errors.html?eid=${error.id}">${error.id}</a></td>
+	    <td><a href="/errors.html?eid=${error.id}">${error.time}</a></td>
+	    <td tal:content="python:error.host" />
+	    <td tal:content="python:error.path" />
+	    <td tal:content="python:error.fixed" />
+	  </tr>
+	</table>
+      </div>
+    </div>
+  </div>
+</div>

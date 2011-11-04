@@ -1,0 +1,12 @@
+Membership:
+  - level of membership (free, member, premium, etc)
+  - member profile?
+  - tie to bandwidth/vhost/storage
+  - take payment
+
+Dashboard:
+  - disable/re-enable site ui
+  - administer a site:
+    - vhost
+    - theme?
+

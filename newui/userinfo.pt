@@ -1,0 +1,78 @@
+<div class="page-header">
+  <h1>User: ${context.email}</h1>
+</div>
+
+<div class="span8">
+  <table class="zebra-striped">
+    <tr>
+      <td>Id</td>
+      <td>${context.id}</td>
+    </tr>
+      <tr>
+	<td>Email</td>
+	<td>${context.email}</td>
+      </tr>
+      <tr>
+	<td>Membership</td>
+	<td>${context.type}</td>
+      </tr>
+      <tr>
+	<td>Joined</td>
+	<td>${view.format.datetime(context.join_date)}</td>
+      </tr>
+      <tr>
+	<td>Number of sites</td>
+	<td>${view.sites}</td>
+      </tr>
+      <tr>
+	<td>Database size</td>
+	<td>${view.dbsize}</td>
+      </tr>
+      <tr>
+	<td>Bandwidth</td>
+	<td>${view.bandwidth}</td>
+      </tr>
+    </table>
+  </div>
+  
+<div class="span7">
+  <h4>Change membership type</h4>
+  <tal:block tal:content="structure view.snippet('form-view', view)" />
+  
+  <h4>Change user password</h4>
+  ${view.snippet('form-view', view.change_password)}
+</div>
+
+<div class="span8" tal:repeat="site view.site_infos">
+  <h3><a href="http://${site['host']}">${site['host']}</a>
+    (<a target="_blank" href="../login?id=${site['site_id']}">Login</a>)
+  </h3>
+    
+  <table class="zebra-striped">
+    <tr>
+      <td>Site id/type</td>
+      <td class="type-0">${site['id']}</td>
+    </tr>
+    <tr>
+      <td>Site name</td>
+      <td>${site['name']}</td>
+    </tr>
+    <tr>
+      <td>Last accessed</td>
+      <td>${view.format.datetime(site['last_accessed'])}</td>
+    </tr>
+    <tr>
+      <td>Disabled</td>
+      <td>${site['disabled']}</td>
+    </tr>
+    <tr>
+      <td>Database size</td>
+      <td>${site['dbsize']}</td>
+    <tr>
+      <td>Bandwidth</td>
+      <td>${site['bandwidth']}</td>
+    </tr>
+  </table>
+    
+  <tal:block content="structure site['form'].render()" />
+</div>

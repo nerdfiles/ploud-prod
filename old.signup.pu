@@ -1,0 +1,131 @@
+""" signup form """
+import datetime, json, random
+from email.mime.text import MIMEText
+
+import transaction
+from webob.exc import HTTPFound
+from pyramid import renderers
+from pyramid.security import remember, authenticated_userid
+
+from memphis import view
+from ploud.utils import ploud_config
+from ploud.utils.policy import POLICIES
+from ploud.frontend import utils
+from ploud.frontend.config import log, EMAIL_HOST, EMAIL_FROM, MTA
+from ploud.frontend.config import ALLOWED_SITE_NAME_CHARS, RESERVED_SITE_NAMES
+from ploud.frontend.models import Session, User, Site
+
+
+class SignupView(view.View):
+    view.pyramidView('signup', view.INavigationRoot, layout=None)
+
+    def update(self):
+        allowed = ploud_config.getboolean('frontend', 'registration')
+        if not allowed:
+            raise HTTPFound(location = '/waitinglist.html')
+
+        principal = authenticated_userid(self.request)
+        if principal:
+            raise HTTPFound(location = '/dashboard.html')
+
+        return super(SignupView, self).update()
+
+    @view.subpath(renderer=view.json)
+    def validate(self):
+        errors = {}
+        data = self.request.POST
+
+        email = data['signup-email'].lower()
+        if not utils.isValidMailAddress(email):
+            errors['signup-email'] = 'Value is not valid e-mail address.'
+        elif Session.query(User).filter_by(email=email).count():
+            errors['signup-email'] = 'E-Mail address aready is in use.'
+
+        site_name = data['signup-site-name'].lower()
+        site_name_set = set(site_name)
+        if not site_name_set.issubset(ALLOWED_SITE_NAME_CHARS):
+            errors['signup-site-name'] = \
+                "We couldn't create your Plone site. You've typed invalid characters in site name.  "\
+                "Please only use lowercase alpha-numeric characters, the hyphen, and the underscore."
+        elif site_name in RESERVED_SITE_NAMES:
+            errors['signup-site-name'] = \
+                "We couldn't create your Plone site. You've chosen a reserved site name.  Please try a different site name."
+        else:
+            exists = Session.query(Site).filter_by(site_name=site_name).first()
+            if exists is not None:
+                errors['signup-site-name'] = \
+                    "We couldn't create your Plone site. Site with this name already exists. Please try a different site name."
+
+        return errors
+
+    def render(self):
+        errors = self.validate()
+        if errors:
+            return view.View.render(self) 
+
+        data = self.request.POST
+
+        toc = data.get('accept-toc', '').lower()
+        if toc not in ('true', '1'):
+            return json.dumps({'accept-toc':'You must accept Terms and Conditions'})
+ 
+        email = data['signup-email'].lower()
+        site_name = data['signup-site-name'].lower()
+        password = ''.join(
+            random.choice(ALLOWED_SITE_NAME_CHARS) for i in range(8))
+
+        user = User(email, password, 98)
+        token = user.token
+        Session.add(user)
+        Session.flush()
+        send_activation(email, token)
+
+        try:
+            utils.provision_site(user, 'plone41', site_name)
+        except Exception, exc:
+            transaction.abort()
+            return json.dumps({'signup-site-name': str(exc)})
+
+        headers = remember(self.request, email)
+        raise HTTPFound(location='/dashboard.html', headers=headers)
+
+
+class Validate(view.View):
+    view.pyramidView('validate', view.INavigationRoot)
+
+    def update(self):
+        token = self.request.GET.get('token')
+
+        user = Session.query(User).filter_by(token=token).first()
+        if user is not None:
+            user.type = 0
+            user.token = None
+            user.validated = datetime.datetime.now()
+
+            # change policy to 0 (free)
+            conn = ploud_config.PLOUD_POOL.getconn()
+            cursor = conn.cursor()
+            POLICIES[user.type].apply(user.id, cursor)
+            cursor.close()
+            conn.commit()
+            ploud_config.PLOUD_POOL.putconn(conn)
+
+            headers = remember(self.request, user.email)
+            raise HTTPFound(location = '/dashboard.html', headers = headers)
+        else:
+            raise HTTPFound(location="/?msg=Can't validate email address.")
+
+
+mail_template = renderers.get_renderer(
+    'newui/validate_email.txt').implementation()
+
+def send_activation(email, token):
+    data = dict(host=EMAIL_HOST, email=email, token=token)
+    msg = MIMEText(str(mail_template(**data)))
+    msg['Subject'] = 'Activate Your Ploud Account'
+    msg['From'] = EMAIL_FROM
+    msg['To'] = email
+
+    print msg.as_string()
+
+    ploud_config.Mailer.send(EMAIL_FROM, email, msg)

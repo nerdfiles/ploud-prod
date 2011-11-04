@@ -1,0 +1,39 @@
+<div>
+  <h3>Registration disabled.</h3>
+  <p>Registration is currently disabled.  
+    Sign up to get on the waiting list.</p>
+</div>
+
+<tal:signup tal:condition="not view.completed">
+  <h3>Sign up</h3>
+  <p>
+    Registration will be extended to users who signup in
+    order in which their submissions were received.  Sign up
+    and you will be on the waiting list to register to 
+    create Plone sites
+  </p>
+  
+  <form action="/waitinglist.html" method="post">
+    <fieldset>
+      <ul>
+        <li tal:define="email request.POST.get('email','')">
+          <label>Email</label>
+          <input type="text" name="email" value="${email}" />
+          <input type="hidden" name="completed" value="1" />
+        </li>
+        <li>
+          <input type="submit" class="submit" name="submit" value="Sign up" />
+        </li>
+      </ul>
+    </fieldset>
+  </form>
+</tal:signup>
+
+<tal:signup tal:condition="python: view.completed">
+  <h3>Added to list</h3>
+  <p>
+    You have been added to the waiting list.  You will receive an email
+    confirmation and that will be followed up with a registration offer
+    soon.
+  </p>
+</tal:signup>

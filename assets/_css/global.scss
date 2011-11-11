@@ -1212,3 +1212,10 @@ html.js div.site-actions-menu {
   #cboxContent { height: 500px !important; }
   .mod-modal-content { height: 500px !important; } }
 
+@media screen and (orientation: landscape) {
+  body { min-width: none; }
+}
+
+@media screen and (orientation: portrait) {
+  body { min-width: none; }
+}
